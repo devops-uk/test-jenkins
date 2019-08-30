@@ -3,10 +3,10 @@ node('docker') {
     stage 'Checkout'
         checkout scm
     stage 'Build & UnitTest'
-        sh "docker build -t accountownerapp:B${BUILD_NUMBER} -f Dockerfile ."
-        sh "docker build -t accountownerapp:test-B${BUILD_NUMBER} -f Dockerfile.Integration ."
+        sh "docker pull jenkins"
+        sh "docker pull ubuntu "
   
     stage 'Integration Test'
-        sh "docker-compose -f docker-compose.integration.yml up --force-recreate --abort-on-container-exit"
-        sh "docker-compose -f docker-compose.integration.yml down -v"
+        sh "docker build -t jenkins"
+        sh "docker run -it -d jenkins -p 8080:8080 -p 500000:500000"
 }
