@@ -1,25 +1,21 @@
-node {
-    def app
-
-    stage('Clone repository') {
-        /* Let's make sure we have the repository cloned to our workspace */
-
-        checkout scm
-    }
-
-    stage('Build image') {
-        /* This builds the actual image; synonymous to
-         * docker build on the command line */
-
-        app = docker.pull("ubuntu:lastest")
-    }
-
-    stage('Test image') {
-        /* Ideally, we would run a test framework against our image.
-         * For this example, we're using a Volkswagen-type approach ;-) */
-
-        app.inside {
-            sh 'echo "Tests passed"'
+pipeline {
+    agent none
+    stages {
+        stage('Back-end') {
+            agent {
+                docker { image 'maven:3-alpine' }
+            }
+            steps {
+                sh 'mvn --version'
+            }
+        }
+        stage('Front-end') {
+            agent {
+                docker { image 'node:7-alpine' }
+            }
+            steps {
+                sh 'node --version'
+            }
         }
     }
 }
